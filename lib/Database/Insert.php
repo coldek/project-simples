@@ -5,7 +5,7 @@ namespace App\Database;
 require_once('Main.php');
 use App\Database\Executor as Executor;
 
-
+$cock = true;
 
 class Insert {
   public static string $table;
