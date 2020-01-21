@@ -9,6 +9,7 @@ use App\Debug\Debugger as Debugger;
 
 abstract class Model {
   public static string $table;
+  public static string $className;
   public array $row;
   public static bool $exists;
 
@@ -29,7 +30,8 @@ abstract class Model {
 
   public static function init () {
     $reflection = new \ReflectionClass(get_called_class());
-    self::$table = $reflection->getShortName();
+    self::$table = strtolower($reflection->getShortName()) . "s";
+    self::$className = $reflection->getNamespaceName() . "\\" . $reflection->getShortName();
   }
 
   public function __construct ( int $id ) {
@@ -38,17 +40,13 @@ abstract class Model {
     self::get($id);
   }
 
-  public static function findOrFail ( array $where, array $binds = null, string ...$columns) {
+  public static function findOrFail ( array $where, array $binds = null) {
 
     self::init();
-    $result = DB::select(self::$table)->where($where);
+    $result = DB::select(self::$table)->where($where)->columns('id');
 
-    if(empty($columns))
-      $result->columns = [true];
-    else
-      $result->columns(...$columns);
-      $fetch = $result->build();
-    return ($fetch) ? (int) $fetch->fetch(\PDO::FETCH_ASSOC): false;
+    $fetch = $result->build($binds)->fetch(\PDO::FETCH_ASSOC);
+    return ($fetch) ? new self::$className($fetch['id']): false;
   }
 
   public function save () {

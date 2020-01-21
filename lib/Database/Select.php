@@ -96,7 +96,7 @@ class Select implements QueryBuilder {
   }
 
   public function build( $binds = null ) {
-    if($binds == null)
+    if($binds == null && isset($this->binds))
       $binds = $this->binds;
     $query = "SELECT ";
 

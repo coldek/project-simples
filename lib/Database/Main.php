@@ -16,7 +16,7 @@ class Main {
   public static array $selectIdentifiers = ['#getCount' => 'Count(*)', '#getDistinct' => 'DISTINCT'];
   /* Database Connection Info */
   public const ADDRESS = '127.0.0.1';
-  public const DATABASE = 'Vertineer';
+  public const DATABASE = 'vertineer';
   public const USERNAME = 'root';
   public const PASSWORD = '';
 
