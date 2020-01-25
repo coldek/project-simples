@@ -40,13 +40,23 @@ abstract class Model {
     self::get($id);
   }
 
-  public static function findOrFail ( array $where, array $binds = null) {
+  public static function findOrFail ( array $where, &$var, array $binds = null ) {
 
     self::init();
     $result = DB::select(self::$table)->where($where)->columns('id');
 
     $fetch = $result->build($binds)->fetch(\PDO::FETCH_ASSOC);
-    return ($fetch) ? new self::$className($fetch['id']): false;
+    $return = true;
+
+
+    if($fetch) {
+      $var = new self::$className($fetch['id']);
+      $return = true;
+    } else {
+      $return = false;
+    }
+
+    return $return;
   }
 
   public function save () {
@@ -58,7 +68,6 @@ abstract class Model {
         $binds[':' . $column] = $this->{$column};
       }
     }
-    Debugger::array($binds);
     if(!empty($changed))
       DB::update(self::$table)->set($changed)->where(['id' => $this->id])->build($binds);
   }

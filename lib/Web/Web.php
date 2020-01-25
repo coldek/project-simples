@@ -11,4 +11,18 @@ class Web {
     $function->__invoke();
     include self::$footer;
   }
+
+  public static function get ( &$getVar ) {
+    if(empty($_GET)) {
+      $getVar = false;
+    } else {
+      $getVar = [];
+      foreach($_GET as $name => $val) {
+        $getVar[$name] = $val;
+      }
+      $getVar = (object) $getVar;
+    }
+
+    return true;
+  }
 }

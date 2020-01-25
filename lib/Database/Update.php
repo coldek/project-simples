@@ -92,7 +92,6 @@ class Update implements QueryBuilder {
         }
       }
     }
-    echo $query;
     return Executor::query($query)->execute($binds);
   }
 }
